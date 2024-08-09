@@ -26,7 +26,8 @@ class DevController extends Controller
         return null;
     }
 
-    public function test()
+    public function getDummyConfig()
     {
+        return config('dummyjson');
     }
 }
