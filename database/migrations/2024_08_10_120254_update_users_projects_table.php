@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('users_projects', function (Blueprint $table) {
-            $table->timestamp('deadline_date');
+            $table->date('deadline_date');
             $table->foreignId('assignee_id')->constrained('users');
             $table->index('assignee_id');
         });

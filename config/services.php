@@ -1,9 +1,14 @@
 <?php
+
 /**
- * Конфигурации для интеграций со сторонними сервисами
- * @docs https://github.com/laravel/laravel/blob/11.x/config/services.php
+ * Конфигурация для работы с DummyJSON
  */
 
 return [
-    // ...
+    'data' => [
+        'host' => env('DUMMY_JSON_HOST', ''),
+        'username' => env('DUMMY_JSON_USERNAME', ''),
+        'password' => env('DUMMY_JSON_PASSWORD', ''),
+    ],
+
 ];
