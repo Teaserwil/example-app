@@ -27,5 +27,5 @@ Route::resource('projects', ProjectController::class)->only([
     'show',
     'store',
     'edit',
-    'destroy'
+    'destroy',
 ]);
