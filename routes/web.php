@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
 Route::resource('projects', ProjectController::class)->only([
     'index',
     'show',
+    'create',
     'store',
     'edit',
     'destroy',
