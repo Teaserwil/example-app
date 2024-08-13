@@ -10,7 +10,7 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         //Хардкодим список проектов
-        for ($i = 1; $i <= 2; $i++) {
+        for ($i = 1; $i <= 12; $i++) {
             $listProjects[] = [
                 'id' => $i,
                 'name' => 'Project ' . fake()->domainName(),

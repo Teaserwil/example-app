@@ -1,34 +1,32 @@
 @extends('layouts.projects')
 
 @section('content')
-    <h1>Проекты список</h1>
-    <div>
-        <a href="{{ route('projects.create',['access' => 'yes']) }}">Добавить новый</a>
+    <x-projects.title>
+        Список проектов
+    </x-projects.title>
+    <div class="mb-2" >
+        <a href="{{ route('projects.create',['access' => 'yes']) }}" class="btn btn-primary">Добавить новый</a>
     </div>
-    <table>
-        <tr>
-            <th>id</th>
-            <th>Имя проекта</th>
-            <th>id владельца</th>
-            <th>Активен</th>
-            <th>Дата сдачи</th>
-            <th>id Ответственного</th>
-            <th></th>
-        </tr>
+    <div class="col-12 shadow p-2 mb-5 bg-body-tertiary rounded d-flex flex-column card">
+        <div class="dt p-2 border-bottom d-flex justify-content-between in_table align-items-center">
+            <div>id</div>
+            <div>Имя проекта</div>
+            <div>id владельца</div>
+            <div>Активен</div>
+            <div>Дата сдачи</div>
+            <div>id Ответственного</div>
+            <div></div>
+        </div>
         @foreach($listProjects as $project)
-            <tr>
-                <td>{{ $project['id'] }}</td>
-                <td><a href="{{ route('projects.show',$project['id']) }}?access=yes">{{ $project['name'] }}</a></td>
-                <td>{{ $project['owner_id'] }}</td>
-                <td>@if($project['is_active'])
-                        Да
-                    @else
-                        Нет
-                    @endif</td>
-                <td>{{ $project['deadline_date'] }}</td>
-                <td>{{ $project['assignee_id'] }}</td>
-                <td><a href="{{ route('projects.edit',$project['id']) }}?access=yes">Редактировать</a></td>
-            </tr>
+            <div class="border-bottom p-2 d-flex justify-content-between in_table align-items-center">
+                <div>{{ $project['id'] }}</div>
+                <div><a href="{{ route('projects.show',$project['id']) }}?access=yes">{{ $project['name'] }}</a></div>
+                <div>{{ $project['owner_id'] }}</div>
+                <div>{{ $project['is_active'] ? 'Да' : 'Нет' }}</div>
+                <div>{{ $project['deadline_date'] }}</div>
+                <div>{{ $project['assignee_id'] }}</div>
+                <div><a href="{{ route('projects.edit',$project['id']) }}?access=yes" class="btn btn-outline-info pull-right">Редактировать</a></div>
+            </div>
         @endforeach
-    </table>
+    </div>
 @endsection
