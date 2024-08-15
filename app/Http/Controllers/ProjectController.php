@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserProject;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -11,6 +12,8 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         //Хардкодим список проектов
+        //$test = User::find(1)->ownedProjects;
+        //dd($test);
         for ($i = 1; $i <= 12; $i++) {
             $listProjects[] = [
                 'id' => $i,

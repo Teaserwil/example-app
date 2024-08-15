@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 
 class User extends Authenticatable
 {
@@ -23,7 +25,7 @@ class User extends Authenticatable
         'phone',
         'password',
         'role',
-        'is_blocked'
+        'is_blocked',
     ];
 
     protected function casts(): array
@@ -65,5 +67,15 @@ class User extends Authenticatable
             });
 
         return $query;
+    }
+
+    public function ownedProjects(): HasMany
+    {
+        return $this->hasMany(UserProject::class, 'owner_id');
+    }
+
+    public function assignedProjects(): HasMany
+    {
+        return $this->hasMany(UserProject::class, 'assignee_id');
     }
 }
