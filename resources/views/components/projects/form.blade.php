@@ -16,14 +16,22 @@
     @endif
 
     <x-projects.input placeholder="Имя проекта"
-                      value="{{ $project['name'] ?? '' }}" />
+                      name="name"
+                      value="{{ $project['name'] ?? '' }}"/>
     <x-projects.select :users="$users"
-                       value="{{ $project['owner_id'] ?? '' }}">Выберите владельца</x-projects.select>
+                       name="owner_id"
+                       value="{{ $project['owner_id'] ?? '' }}">Выберите владельца
+    </x-projects.select>
     <x-projects.input placeholder="Дата сдачи проекта"
-                      value="{{ $project['deadline_date'] ?? '' }}" />
+                      name="deadline_date"
+                      value="{{ $project['deadline_date'] ?? '' }}"/>
     <x-projects.select :is_active="1"
-                       value="{{ $project['is_active'] ?? '' }}">Активен/неактивен</x-projects.select>
+                       name="is_active"
+                       value="{{ $project['is_active'] ?? '' }}">Активен/неактивен
+    </x-projects.select>
     <x-projects.select :users="$users"
-                       value="{{ $project['assignee_id'] ?? '' }}">Выберите ответсвенного</x-projects.select>
+                       name="assignee_id"
+                       value="{{ $project['assignee_id'] ?? '' }}">Выберите ответсвенного
+    </x-projects.select>
     {{ $slot }}
 </form>

@@ -15,8 +15,30 @@
     </style>
 </head>
 <body>
+@if ($errors->any())
+    <x-alert type_alert="warning">
+        <x-slot name="title">
+            Ошибка!
+        </x-slot>
+        <x-slot name="message">
+            @foreach ($errors->all() as $error)
+                <div>{{ $error }}</div>
+            @endforeach
+        </x-slot>
+    </x-alert>
+@endif
+@if($alert = session()->pull('alert'))
+    <x-alert type_alert="{{ $alert['type'] ? $alert['type'] : 'note' }}">
+        <x-slot name="title">
+            {{ $alert['title'] ? $alert['title'] : '' }}
+        </x-slot>
+        <x-slot name="message">
+            {{ $alert['message'] ? $alert['message'] : '' }}
+        </x-slot>
+    </x-alert>
+@endif
 <div class="container">
-@yield('content')
+    @yield('content')
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
         integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"

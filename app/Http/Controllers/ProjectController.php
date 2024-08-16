@@ -9,77 +9,98 @@ use Illuminate\Support\Facades\DB;
 
 class ProjectController extends Controller
 {
+
     public function index(Request $request)
     {
-        //Хардкодим список проектов
-        //$test = User::find(1)->ownedProjects;
-        //dd($test);
-        for ($i = 1; $i <= 12; $i++) {
-            $listProjects[] = [
-                'id' => $i,
-                'name' => 'Project ' . fake()->domainName(),
-                'owner_id' => fake()->randomNumber(),
-                'is_active' => fake()->boolean(),
-                'created_at' => fake()->time(),
-                'updated_at' => fake()->time(),
-                'deadline_date' => fake()->dateTimeThisYear("+120 days")->format('d/m/Y'),
-                'assignee_id' => fake()->randomNumber(),
-            ];
-        }
+        $listProjects = UserProject::all();
 
         return view('pages.projects.index', ['listProjects' => $listProjects]);
     }
 
-    public function show(Request $request)
+    public function show(UserProject $project)
     {
-        $project = [
-            'id' => fake()->randomNumber(),
-            'name' => 'Project ' . fake()->domainName(),
-            'owner_id' => fake()->randomNumber(),
-            'is_active' => fake()->boolean(),
-            'created_at' => fake()->time(),
-            'updated_at' => fake()->time(),
-            'deadline_date' => fake()->dateTimeThisYear("+120 days")->format('d/m/Y'),
-            'assignee_id' => fake()->randomNumber(),
-        ];
-
         return view('pages.projects.show', $project);
     }
 
     public function create(Request $request)
     {
         //В дальнейшем запрос можно усложнить и добавить выборку ролей или групп
-        $users = DB::select('select * from users');
+        $users = User::all();
 
         return view('pages.projects.create', ['users' => $users]);
     }
 
     public function store(Request $request)
     {
-        return 'Сохраняем новый проект';
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:200'],
+            'owner_id' => ['required', 'string'],
+            'is_active' => ['required', 'string'],
+            'deadline_date' => ['required', 'string', 'date_format:d.m.Y'],
+            'assignee_id' => ['required', 'string'],
+        ]);
+
+        $project = UserProject::query()->create([
+            'name' => $validated['name'],
+            'owner_id' => $validated['owner_id'],
+            'is_active' => $validated['is_active'],
+            'deadline_date' => $validated['deadline_date'],
+            'assignee_id' => $validated['assignee_id'],
+        ]);
+
+        session([
+            'alert' => [
+                'title' => '',
+                'message' => 'Проект ' . $validated['name'] . ' сохранен!',
+                'type' => 'success',
+            ],
+        ]);
+
+        return redirect()->route('projects.show', ['project' => $project, 'access' => 'yes']);
     }
 
-    public function edit(Request $request)
+    public function edit(UserProject $project)
     {
-        $project = [
-            'id' => fake()->randomNumber(),
-            'name' => 'Project ' . fake()->domainName(),
-            'owner_id' => 1,//Ставим айди 1 так как у нас только админ в базе
-            'is_active' => fake()->boolean(),
-            'created_at' => fake()->time(),
-            'updated_at' => fake()->time(),
-            'deadline_date' => fake()->dateTimeThisYear("+120 days")->format('d/m/Y'),
-            'assignee_id' => 1,
-        ];
-
-        $users = DB::select('select * from users');
+        $users = User::all();
 
         return view('pages.projects.edit', ['project' => $project, 'users' => $users]);
     }
 
-    public function destroy(Request $request)
+    public function update(Request $request, UserProject $project)
     {
-        return 'Удалить проект';
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:200'],
+            'owner_id' => ['required', 'string'],
+            'is_active' => ['required', 'string'],
+            'deadline_date' => ['required', 'string', 'date_format:d.m.Y'],
+            'assignee_id' => ['required', 'string'],
+        ]);
+
+        $project->update($validated);
+
+        session([
+            'alert' => [
+                'title' => '',
+                'message' => 'Проект ' . $validated['name'] . ' изменен!',
+                'type' => 'success',
+            ],
+        ]);
+
+        return redirect()->route('projects.show', ['project' => $project, 'access' => 'yes']);
+    }
+
+    public function destroy(UserProject $project)
+    {
+        $project->delete();
+        session([
+            'alert' => [
+                'title' => '',
+                'message' => 'Проект ' . $project['name'] . ' удален!',
+                'type' => 'warning',
+            ],
+        ]);
+
+        return back();
     }
 
 }
