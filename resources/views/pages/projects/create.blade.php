@@ -5,9 +5,9 @@
         Создать проект
     </x-projects.title>
     <div class="mb-2">
-        <a href="{{ route('projects.index',['access' => 'yes']) }}" class="btn btn-primary">К списку</a>
+        <a href="{{ route('projects.index') }}" class="btn btn-primary">К списку</a>
     </div>
-    <x-projects.form :users="$users" action="{{ route('projects.store', [ 'access' => 'yes' ]) }}" method="post">
+    <x-projects.form :users="$users" action="{{ route('projects.store') }}" method="post">
         <x-projects.button type="submit">Создать</x-projects.button>
     </x-projects.form>
 @endsection

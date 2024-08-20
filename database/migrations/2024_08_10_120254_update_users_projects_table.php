@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('users_projects', function (Blueprint $table) {
+        Schema::table('projects', function (Blueprint $table) {
             $table->date('deadline_date');
             $table->foreignId('assignee_id')->constrained('users');
             $table->index('assignee_id');
@@ -22,7 +22,7 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('users_projects', function (Blueprint $table) {
+        Schema::table('projects', function (Blueprint $table) {
             $table->dropColumn('deadline_date');
             $table->dropColumn('assignee_id');
         });

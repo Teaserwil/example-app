@@ -71,11 +71,11 @@ class User extends Authenticatable
 
     public function ownedProjects(): HasMany
     {
-        return $this->hasMany(UserProject::class, 'owner_id');
+        return $this->hasMany(Project::class, 'owner_id');
     }
 
     public function assignedProjects(): HasMany
     {
-        return $this->hasMany(UserProject::class, 'assignee_id');
+        return $this->hasMany(Project::class, 'assignee_id');
     }
 }

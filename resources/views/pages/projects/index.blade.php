@@ -5,7 +5,7 @@
         Список проектов
     </x-projects.title>
     <div class="mb-2">
-        <a href="{{ route('projects.create',['access' => 'yes']) }}" class="btn btn-primary">Добавить новый</a>
+        <a href="{{ route('projects.create') }}" class="btn btn-primary">Добавить новый</a>
     </div>
     <div class="col-12 shadow p-2 mb-5 bg-body-tertiary rounded d-flex flex-column card">
         <div class="dt p-2 border-bottom d-flex justify-content-between in_table align-items-center">

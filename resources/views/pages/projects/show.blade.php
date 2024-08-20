@@ -6,7 +6,7 @@
         <x-slot name="name_project">{{ $name }}</x-slot>
     </x-projects.title>
     <div class="mb-2">
-        <a href="{{ route('projects.index',['access' => 'yes']) }}" class="btn btn-primary">К списку</a>
+        <a href="{{ route('projects.index') }}" class="btn btn-primary">К списку</a>
     </div>
     <div class="offset-3 col-6 shadow p-2 mb-5 bg-body-tertiary rounded d-flex flex-column card">
         <div class="border-bottom p-2 d-flex justify-content-between in_table align-items-center">Айди - {{ $id }}</div>

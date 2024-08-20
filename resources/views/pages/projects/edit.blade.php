@@ -6,7 +6,7 @@
         <x-slot name="name_project">{{ $project['name'] }}</x-slot>
     </x-projects.title>
     <div class="mb-2">
-        <a href="{{ route('projects.index',['access' => 'yes']) }}" class="btn btn-primary">К списку</a>
+        <a href="{{ route('projects.index') }}" class="btn btn-primary">К списку</a>
     </div>
     <x-projects.form
         :project="$project"

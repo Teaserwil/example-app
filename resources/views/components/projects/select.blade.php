@@ -10,9 +10,9 @@
     @else
 
         <option @empty($value) selected @endempty disabled >{{$slot}}</option>
-        @foreach($users as $user)
-            <option value="{{ $user->id }}" {{ ($user->id == $value) ? 'selected' : null }}>
-                {{ $user->username }}
+        @foreach($users as $name => $id)
+            <option value="{{ $id }}" {{ ($id == $value) ? 'selected' : null }}>
+                {{ $name }}
             </option>
         @endforeach
     @endif

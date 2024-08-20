@@ -2,103 +2,93 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\UserProject;
+use App\Http\Requests\Project\ProjectStoreRequest;
+use App\Http\Requests\Project\ProjectUpdateRequest;
+use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ProjectController extends Controller
 {
 
+    /**
+     * Список проектов
+     *
+     * GET /projects
+     */
     public function index(Request $request)
     {
-        $listProjects = UserProject::all();
+        $listProjects = Project::all();
 
         return view('pages.projects.index', ['listProjects' => $listProjects]);
     }
 
-    public function show(UserProject $project)
+    /**
+     * Показать один проект
+     *
+     * GET /projects/{project}
+     */
+    public function show(Project $project)
     {
         return view('pages.projects.show', $project);
     }
 
+    /**
+     * Форма создания проекта
+     *
+     * GET /projects/create
+     */
     public function create(Request $request)
     {
-        //В дальнейшем запрос можно усложнить и добавить выборку ролей или групп
-        $users = User::all();
+        $users = User::pluck('id', 'username');
 
         return view('pages.projects.create', ['users' => $users]);
     }
 
-    public function store(Request $request)
+    /**
+     * Сохранить новый проект
+     *
+     * POST /projects
+     */
+    public function store(ProjectStoreRequest $request)
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:200'],
-            'owner_id' => ['required', 'string'],
-            'is_active' => ['required', 'string'],
-            'deadline_date' => ['required', 'string', 'date_format:d.m.Y'],
-            'assignee_id' => ['required', 'string'],
-        ]);
+        $project = Project::create($request->validated());
 
-        $project = UserProject::query()->create([
-            'name' => $validated['name'],
-            'owner_id' => $validated['owner_id'],
-            'is_active' => $validated['is_active'],
-            'deadline_date' => $validated['deadline_date'],
-            'assignee_id' => $validated['assignee_id'],
-        ]);
-
-        session([
-            'alert' => [
-                'title' => '',
-                'message' => 'Проект ' . $validated['name'] . ' сохранен!',
-                'type' => 'success',
-            ],
-        ]);
-
-        return redirect()->route('projects.show', ['project' => $project, 'access' => 'yes']);
+        return redirect()->route('projects.show', ['project' => $project]);
     }
 
-    public function edit(UserProject $project)
+    /**
+     * Форма редактирования проекта
+     *
+     * GET /projects/{project}/edit
+     */
+    public function edit(Project $project)
     {
-        $users = User::all();
+        $users = User::pluck('id', 'username');
 
         return view('pages.projects.edit', ['project' => $project, 'users' => $users]);
     }
 
-    public function update(Request $request, UserProject $project)
+    /**
+     * Сохранение изменений в проекте
+     *
+     * PUT /projects/{project}
+     */
+    public function update(ProjectUpdateRequest $request, Project $project)
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:200'],
-            'owner_id' => ['required', 'string'],
-            'is_active' => ['required', 'string'],
-            'deadline_date' => ['required', 'string', 'date_format:d.m.Y'],
-            'assignee_id' => ['required', 'string'],
-        ]);
+        $project->update($request->validated());
 
-        $project->update($validated);
-
-        session([
-            'alert' => [
-                'title' => '',
-                'message' => 'Проект ' . $validated['name'] . ' изменен!',
-                'type' => 'success',
-            ],
-        ]);
-
-        return redirect()->route('projects.show', ['project' => $project, 'access' => 'yes']);
+        return redirect()->route('projects.show', ['project' => $project]);
     }
 
-    public function destroy(UserProject $project)
+    /**
+     * Удаление проекта
+     *
+     * DELETE /projects/{project}
+     */
+    public function destroy(Project $project)
     {
         $project->delete();
-        session([
-            'alert' => [
-                'title' => '',
-                'message' => 'Проект ' . $project['name'] . ' удален!',
-                'type' => 'warning',
-            ],
-        ]);
 
         return back();
     }
