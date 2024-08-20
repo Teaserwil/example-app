@@ -7,6 +7,7 @@ use App\Http\Requests\Project\ProjectUpdateRequest;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ProjectController extends Controller
 {
@@ -18,6 +19,7 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
+        Gate::authorize('viewAll', Project::class);
         $listProjects = Project::all();
 
         return view('pages.projects.index', ['listProjects' => $listProjects]);
@@ -30,6 +32,8 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
+        Gate::authorize('view', $project);
+
         return view('pages.projects.show', $project);
     }
 
@@ -40,6 +44,7 @@ class ProjectController extends Controller
      */
     public function create(Request $request)
     {
+        Gate::authorize('create', Project::class);
         $users = User::pluck('id', 'username');
 
         return view('pages.projects.create', ['users' => $users]);
@@ -52,6 +57,7 @@ class ProjectController extends Controller
      */
     public function store(ProjectStoreRequest $request)
     {
+        Gate::authorize('create', Project::class);
         $project = Project::create($request->validated());
 
         return redirect()->route('projects.show', ['project' => $project]);
@@ -64,6 +70,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
+        Gate::authorize('update', $project);
         $users = User::pluck('id', 'username');
 
         return view('pages.projects.edit', ['project' => $project, 'users' => $users]);
@@ -76,6 +83,7 @@ class ProjectController extends Controller
      */
     public function update(ProjectUpdateRequest $request, Project $project)
     {
+        Gate::authorize('update', $project);
         $project->update($request->validated());
 
         return redirect()->route('projects.show', ['project' => $project]);
@@ -88,6 +96,7 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        Gate::authorize('delete', $project);
         $project->delete();
 
         return back();

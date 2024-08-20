@@ -14,9 +14,10 @@ class CheckAccess
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->input('access') == 'yes') {
-            return $next($request);
+        if ($request->input('access') != 'yes') {
+            abort(403);
         }
-        abort(403);
+
+        return $next($request);
     }
 }

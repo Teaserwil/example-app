@@ -6,13 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ProjectUpdateRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    //public function authorize(): bool
-    //{
-    //    return false;
-    //}
 
     /**
      * Get the validation rules that apply to the request.
@@ -23,10 +16,10 @@ class ProjectUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:200'],
-            'owner_id' => ['required', 'string','exists:users,id'],
+            'owner_id' => ['required', 'string', 'exists:users,id'],
             'is_active' => ['required', 'string'],
             'deadline_date' => ['required', 'string', 'date_format:d.m.Y'],
-            'assignee_id' => ['required', 'string','exists:users,id'],
+            'assignee_id' => ['required', 'string', 'exists:users,id'],
         ];
     }
 }
