@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Support\Facades\Auth;
 
 class DevController extends Controller
 {
@@ -82,6 +83,9 @@ class DevController extends Controller
         return $projects;
     }
 
+    /*
+     * Обновить данные рандомного проекта
+     */
     public static function updateRandom()
     {
         $pogect = Project::query()->inRandomOrder()->first()->update([
@@ -94,4 +98,57 @@ class DevController extends Controller
 
         return $pogect;
     }
+
+    /*
+     * Получает три последних проекта; если текущий пользователь авторизован,
+     * то те, которые принадлежат текущему пользователю;
+     * если не авторизован — то кому-угодно.
+     */
+    public static function getMyLatestThree()
+    {
+        if (Auth::check()) {
+            $projects = DB::table('projects')
+                ->where('owner_id', '=', Auth::user()->id)
+                ->limit(3)
+                ->orderBy('created_at', 'desc')
+                ->get();
+        } else {
+            $projects = DB::table('projects')
+                ->limit(3)
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
+
+        return $projects;
+    }
+
+    /*
+     * Получает список пользователей (их username) и кол-во проектов у каждого.
+     */
+    public static function usersProjects()
+    {
+        $users = DB::table('projects')
+            ->rightJoin('users', function (JoinClause $join) {
+                $join->on('projects.owner_id', '=', 'users.id');
+            })
+            ->select(DB::raw('username, username'), DB::raw('count(*) as projects_count, owner_id'))
+            ->groupBy('username', 'owner_id')
+            ->get();
+
+        return $users;
+    }
+
+    /*
+     * Получает кол-во проектов с истекшим дедлайном.
+     */
+    public static function getExpiredProjectsCount()
+    {
+        $projects = DB::table('projects')
+            ->where('deadline_date', '<', now())
+            ->orderBy('deadline_date', 'asc')
+            ->count();
+
+        return $projects;
+    }
+
 }

@@ -22,13 +22,4 @@ Route::middleware('auth')->group(function () {
 /**
  * Проекты
  */
-Route::resource('projects', ProjectController::class)->only([
-    'index',
-    'show',
-    'create',
-    'store',
-    'edit',
-    'update',
-    'destroy',
-
-]);
+Route::resource('projects', ProjectController::class);
